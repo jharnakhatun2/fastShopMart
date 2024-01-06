@@ -5,7 +5,7 @@ export default function Login() {
         <h1 className="text-xl md:text-xl leading-tight">
           Welcome to FastShopMart ! Please login.
         </h1>
-        <div className="flex items-center justify-center">
+        <div className="block md:flex items-center justify-center">
           <div>
             <form className="mt-6" action="#" method="POST">
               <div>
@@ -13,7 +13,8 @@ export default function Login() {
                 <input
                   type="email"
                   placeholder="Please enter your Email"
-                  className="w-full px-4 py-2 bg-gray-200 mt-2 border text-sm focus:bg-white focus:outline-none" required
+                  className="w-full px-4 py-2 bg-gray-200 mt-2 border text-sm focus:bg-white focus:outline-none"
+                  required
                 />
               </div>
               <div className="mt-4">
@@ -35,15 +36,15 @@ export default function Login() {
                 </a>
               </div>
               <button
-              type="submit"
-              className="w-full block bg-orange-400 hover:bg-orange-500 text-white font-semibold px-4 py-2 mt-5"
-            >
-              Log In
-            </button>
+                type="submit"
+                className="w-full block bg-orange-400 hover:bg-orange-500 text-white font-semibold px-4 py-2 mt-5 mb-5 md:mb-0"
+              >
+                Log In
+              </button>
             </form>
           </div>
-          <div className="pl-10">
-            <p className="text-sm">Or, login with</p>
+          <div className="pl:0 md:pl-10">
+            <p className="text-sm md:mt-6">Or, login with</p>
             <button
               type="button"
               className="w-full block bg-white hover:bg-gray-100 focus:bg-gray-100 text-gray-900 font-semibold px-4 py-2 mb-5 mt-2 border border-gray-300"
