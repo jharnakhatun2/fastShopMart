@@ -1,4 +1,7 @@
+
+
 export default function Registration() {
+  
     return(
       <main className="flex items-center justify-between p-10">
       <div className="bg-white mx-auto p-6 lg:p-16 xl:p-12">
