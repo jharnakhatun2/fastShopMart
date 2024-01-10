@@ -1,4 +1,62 @@
+"use client";
+
+import { AuthContext } from "@/app/context/AuthProvider";
+import { useContext, useState } from "react";
+import { useForm } from "react-hook-form";
+import { GoogleAuthProvider, FacebookAuthProvider } from "firebase/auth";
+
 export default function Login() {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
+  const { logIn, googleSignIn, facebookSignIn } = useContext(AuthContext);
+  const [logInError, setLogInError] = useState("");
+  const provider = new GoogleAuthProvider();
+  const providerF = new FacebookAuthProvider();
+
+  const handleRegistration = (data) => {
+    console.log(data);
+    setLogInError("");
+    logIn(data.email, data.password)
+      .then((result) => {
+        const user = result.user;
+        console.log(user);
+        // Reset the form after successful registration
+        reset();
+      })
+      .catch((error) => {
+        console.error("Error", error);
+        setLogInError(error.message);
+      });
+  };
+
+  //Google LogIn
+  const handleGoogleLogIn = () => {
+    googleSignIn(provider)
+      .then((result) => {
+        const user = result.user;
+        console.log(user);
+      })
+      .catch((error) => {
+        console.error("Error", error);
+      });
+  };
+
+  //facebook LogIn
+  const handleFacebookLogIn = () => {
+    facebookSignIn(providerF)
+      .then((result) => {
+        const user = result.user;
+        console.log(user);
+      })
+      .catch((error) => {
+        console.error("Error", error);
+      });
+  };
+
   return (
     <main className="flex items-center justify-between p-10">
       <div className="bg-white mx-auto p-6 lg:p-16 xl:p-12">
@@ -7,15 +65,21 @@ export default function Login() {
         </h1>
         <div className="block md:flex items-center justify-center">
           <div>
-            <form className="mt-6" action="#" method="POST">
+            <form className="mt-6" onSubmit={handleSubmit(handleRegistration)}>
               <div>
                 <label className="block text-gray-700 text-sm">Email*</label>
                 <input
                   type="email"
                   placeholder="Please enter your Email"
                   className="w-full px-4 py-2 bg-gray-200 mt-2 border text-sm focus:bg-white focus:outline-none"
-                  required
+                  {...register("email", {
+                    required: "Email Address is required",
+                  })}
+                  aria-invalid={errors.email ? "true" : "false"}
                 />
+                {errors.email && (
+                  <p className="text-red-600 text-xs">{errors.email.message}</p>
+                )}
               </div>
               <div className="mt-4">
                 <label className="block text-gray-700 text-sm">Password*</label>
@@ -24,16 +88,16 @@ export default function Login() {
                   placeholder="Please enter your password"
                   minLength={6}
                   className="w-full px-4 py-2 bg-gray-200 mt-2 border text-sm focus:bg-white focus:outline-none"
-                  required
+                  {...register("password", {
+                    required: "Password is required",
+                  })}
+                  aria-invalid={errors.password ? "true" : "false"}
                 />
-              </div>
-              <div className="text-right mt-0">
-                <a
-                  href="#"
-                  className="text-xs text-blue-400 hover:text-blue-700 focus:text-blue-700"
-                >
-                  Forgot Password?
-                </a>
+                {errors.password && (
+                  <p className="text-red-600 text-xs">
+                    {errors.password.message}
+                  </p>
+                )}
               </div>
               <button
                 type="submit"
@@ -41,6 +105,9 @@ export default function Login() {
               >
                 Log In
               </button>
+              {logInError && (
+                <p className="text-red-600 text-xs pt-3">{logInError}</p>
+              )}
             </form>
           </div>
           <div className="pl:0 md:pl-10">
@@ -57,7 +124,9 @@ export default function Login() {
                 >
                   <path d="M279.14 288l14.22-92.66h-88.91v-60.13c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S260.43 0 225.36 0c-73.22 0-121.08 44.38-121.08 124.72v70.62H22.89V288h81.39v224h100.17V288z" />
                 </svg>
-                <span className="ml-4">Facebook</span>
+                <span className="ml-4" onClick={handleFacebookLogIn}>
+                  Facebook
+                </span>
               </div>
             </button>
             <button
@@ -97,13 +166,15 @@ export default function Login() {
                     d="M48 48L17 24l-4-3 35-10z"
                   />
                 </svg>
-                <span className="ml-4">Google</span>
+                <span className="ml-4" onClick={handleGoogleLogIn}>
+                  Google
+                </span>
               </div>
             </button>
             <p className="mt-8 text-sm">
               Need an account?{" "}
               <a
-                href="#"
+                href="/registration"
                 className="text-blue-500 hover:text-blue-700 font-semibold"
               >
                 Create an account
